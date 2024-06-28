@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% for msg in messages %}
+{{ msg }}
+{% endfor %}
+
+{% if user.is_authenticated %}
+
+<div style="background-color:rgb(0,153,102);padding:20px;" xmlns="http://www.w3.org/1999/html"
+     xmlns="http://www.w3.org/1999/html">
+<nav class="navbar fixed-top" style="background-color:rgb(0,102,51);">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'assets/django_img.png' %}" alt="Logo" width="100" height="40" class="d-inline-block align-text-top rounded"> <h4 style="color:white;float:right;margin-top:8px;margin-left:20px;">DASHBOARD</h4>
+    </a>
+      <a class="navbar-brand" href="{% url 'portfolio' %}">
+<h4 style="color:white;float:right;margin-top:8px;margin-left:20px;">PORTFOLIO</h4>
+    </a>
+       <a class="navbar-brand" href="{% url 'project' %}">
+<h4 style="color:white;float:right;margin-top:8px;margin-left:20px;">PROJECT</h4>
+    </a>
+      <a class="navbar-brand active btn btn-danger btn-sm rounded" href="{% url 'delete_account' %}" style="color:black;width:130px;margin-left:450px;">
+
+<h6 style="color:white;float:right;margin-top:8px;margin-left:20px;">Delete Account</h6>
+    </a>
+      <div class="ms-auto">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active btn btn-warning" aria-current="page" href="{% url 'logout' %}" style="color:black;width:100px;">LOGOUT</a>
+        </li>
+      </ul>
+      </div>
+  </div>
+</nav>
+
+<h2 style="text-align:center;color:lightyellow;margin-top:70px;padding:30px;"><u><i>USER PORTFOLIO</i></u> </h2>
+
+    <div class="card mb-3 rounded" style="background-color:rgb(186, 194, 71);float:left;width:190px;height:190px;margin-left:20px;margin-right:20px;margin-top:20px;">
+  <div class="card-body" style="text-align:center;">
+      <p class="card-text shadow" style="margin-left:-16px;margin-top:-16px;">    {% if profile.photo %}
+        <img src="{{ profile.photo.url }}" alt="Profile Photo" style="width: 190px; height: 190px;"class="rounded">
+        {% else %}
+        <p>No photo uploaded.</p>
+        {% endif %}
+      </p>
+  </div>
+</div>
+
+
+
+
+<div class="card w-80 mb-3" style="background-color:rgb(186, 194, 71);margin-left:50px;margin-right:20px;margin-top:20px;">
+  <div class="card-body" style="text-align:center;margin-top:50px;margin-bottom:50px;">
+      <h5 class="card-title"><B>NAME :</B> {{ user.first_name }} {{ user.last_name }}</h5>
+      <p class="card-text" style="margin-left:50px;margin-top:20px;">{% if contact.linkedin_handle %}
+                <b>LinkedIn Handle:</b> {{ contact.linkedin_handle }}<br>
+          {% else %}
+      <p><b>LINKEDIN HANDLE :</b> Not added </p>
+      {% endif %}
+      </p>
+  </div>
+</div>
+
+<div class="card shadow" style="width:95%;margin-left:30px;margin-top:20px;background-color:rgb(186, 194, 71);">
+  <div class="card-body" style="text-align:center;margin-top:20px;margin-bottom:20px;">
+      <h2 class="card-title"><u>PROJECTS</u></h2>
+    <p class="card-text">
+        <table class="table table-striped table-bordered" >
+  <thead>
+      <tr>
+          <th>SL NO</th>
+      <th>PROJECT TITLE</th>
+      <th>TECHNOLOGIES USED</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for showcase in projects %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+      <td>{{ showcase.project_title }}</td>
+      <td>{{ showcase.technologies_used }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  </table>
+<a href="{% url 'project' %}" class="btn btn-secondary">View Full Details</a>
+  </div>
+    </div>
+
+
+<div class="card shadow" style="width:95%;margin-left:30px;margin-top:20px;background-color:rgb(186, 194, 71);">
+  <div class="card-body" style="text-align:center;margin-top:20px;margin-bottom:20px;">
+      <h2 class="card-title"><u>WORK EXPERIENCE<a href="{% url 'add_work' %}" class="btn btn-success" style="margin-left:30px;">ADD</a>
+</u></h2>
+    <p class="card-text">
+            {% for work in works %}
+    <h4><u>TITLE : {{ work.company_name }}</u><a href="{% url 'edit_work' work.id %}" class="btn btn-warning" style="margin-left:20px;">EDIT<img src="{% static 'assets/edit.png' %}" style="width:20px;height:20px;margin-left:10px;"></a>
+  <a href="{% url 'delete_work' work.id %}" class="btn btn-danger" style="margin-left:20px;">Delete</a>
+</h4>
+
+      <p style="margin-left:-10px;margin-right:30px;margin-top:20px;"><b>JOB TITLE :</b> {{ work.job_title }} <br>
+    <b>MODE OF EXPERIENCE :</b> {{ work.mode }} <br>
+    <b>START DATE :</b> {{ work.start_date }} <br>
+    <b>DURATION :</b> {{ work.duration }} <br>
+    <b>RESPONSIBILITIES :</b> {{ work.responsibilities }} </p> <br>
+
+{% endfor %}
+  </div>
+</div>
+
+<div class="card shadow" style="width:95%;margin-left:30px;margin-top:20px;background-color:rgb(186, 194, 71);">
+  <div class="card-body" style="text-align:center;margin-top:20px;margin-bottom:20px;">
+      <h2 class="card-title"><u>EDUCATION<a href="{% url 'add_education' %}" class="btn btn-success" style="margin-left:30px;">ADD</a>
+</u></h2>
+    <p class="card-text">
+            {% for ed in educ %}
+    <h4>Course : {{ ed.course }}<a href="{% url 'edit_education' ed.id %}" class="btn btn-warning" style="margin-left:20px;">EDIT<img src="{% static 'assets/edit.png' %}" style="width:20px;height:20px;margin-left:10px;"></a>
+  <a href="{% url 'delete_education' ed.id %}" class="btn btn-danger" style="margin-left:20px;">Delete</a>
+</h4>
+
+      <p style="margin-left:-10px;margin-right:30px;margin-top:20px;">
+
+    <b>Institute :</b> {{ ed.institute }}<br>
+
+    <b>Board :</b> {{ ed.board }}<br>
+
+    <b>Aggregrate Marks :</b> {{ ed.aggregrate_marks }}<br>
+
+    <b>Year of Passing :</b> {{ ed.year_of_passing }}<br>
+
+          </p> <br>
+
+{% endfor %}
+  </div>
+</div>
+
+
+<div class="card shadow" style="width:95%;margin-left:30px;margin-top:20px;background-color:rgb(186, 194, 71);">
+  <div class="card-body" style="text-align:center;margin-top:20px;margin-bottom:20px;">
+      <h2 class="card-title"><u>CERTIFICATIONS<a href="{% url 'add_certification' %}" class="btn btn-success" style="margin-left:30px;">ADD</a>
+</u></h2>
+    <p class="card-text">
+            {% for cert in certificate %}
+    <h4>Course : {{ cert.topic }}<a href="{% url 'edit_certification' cert.id %}" class="btn btn-warning" style="margin-left:20px;">EDIT<img src="{% static 'assets/edit.png' %}" style="width:20px;height:20px;margin-left:10px;"></a>
+  <a href="{% url 'delete_certification' cert.id %}" class="btn btn-danger" style="margin-left:20px;">Delete</a>
+</h4>
+
+      <p style="margin-left:-10px;margin-right:30px;margin-top:20px;">
+
+
+    <b>Issuing Organisation : </b>{{ cert.issuing_organisation }}<br>
+
+    <b>Date of Issue  : </b>{{ cert.date_of_issue }}<br>
+
+    <b>Certificate Link : </b>{{ cert.certificate_link }}<br>
+
+          </p> <br>
+
+{% endfor %}
+  </div>
+</div>
+
+
+{% endif %}
+{% endblock %}

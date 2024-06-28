@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% for msg in messages %}
+{{ msg }}
+{% endfor %}
+
+{% if user.is_authenticated %}
+<div style="background-color:rgb(0,153,102);padding:20px;" xmlns="http://www.w3.org/1999/html" >
+<nav class="navbar fixed-top" style="background-color:rgb(0,102,51);">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'assets/django_img.png' %}" alt="Logo" width="100" height="40" class="d-inline-block align-text-top rounded"> <h4 style="color:white;float:right;margin-top:8px;margin-left:20px;">DASHBOARD</h4>
+    </a>
+      <a class="navbar-brand" href="{% url 'portfolio' %}">
+<h4 style="color:white;float:right;margin-top:8px;margin-left:20px;">PORTFOLIO</h4>
+    </a>
+       <a class="navbar-brand" href="{% url 'project' %}">
+<h4 style="color:white;float:right;margin-top:8px;margin-left:20px;">PROJECT</h4>
+    </a>
+      <a class="navbar-brand active btn btn-danger btn-sm rounded" href="{% url 'delete_account' %}" style="color:black;width:130px;margin-left:450px;">
+
+<h6 style="color:white;float:right;margin-top:8px;margin-left:20px;">Delete Account</h6>
+    </a>
+      <div class="ms-auto">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+        </li>
+            <li class="nav-item">
+          <a class="nav-link active btn btn-warning" aria-current="page" href="{% url 'logout' %}" style="color:black;width:100px;">LOGOUT</a>
+        </li>
+      </ul>
+      </div>
+  </div>
+</nav>
+
+<h2 style="text-align:center;color:lightyellow;margin-top:70px;padding:30px;"><u><i>USER DASHBOARD</i></u> </h2>
+
+    <div class="card mb-3 rounded" style="background-color:rgb(186, 194, 71);float:left;width:190px;height:190px;margin-left:20px;margin-right:20px;margin-top:20px;">
+  <div class="card-body" style="text-align:center;">
+      <p class="card-text shadow" style="margin-left:-16px;margin-top:-16px;">    {% if profile.photo %}
+        <img src="{{ profile.photo.url }}" alt="Profile Photo" style="width: 190px; height: 190px;"class="rounded">
+        {% else %}
+        <p>No photo uploaded.</p>
+        {% endif %}
+      </p>
+  </div>
+</div>
+
+
+
+
+<div class="card w-80 mb-3" style="background-color:rgb(186, 194, 71);margin-left:50px;margin-right:20px;margin-top:25px;">
+  <div class="card-body" style="text-align:center;margin-top:50px;margin-bottom:50px;">
+    <h5 class="card-title">Hello __ {{ user.username }} __ <img src="{% static 'assets/smile-icon.webp' %}" style="width:30px;height:30px;"><br>
+    Welcome to DJANGO !!!</h5>
+  </div>
+</div>
+
+
+
+<div class="card shadow" style="width:25%;margin-left:30px;margin-top:20px;background-color:rgb(204,102,153)">
+  <div class="card-body" style="text-align:center;margin-top:20px;margin-bottom:20px;">
+      <h5 class="card-title"><u>BASIC DETAILS</u></h5>
+      <p class="card-text"><b>Name :</b> {{ user.first_name }} {{ user.last_name }}<br>
+          <b>Mail :</b> {{ user.email }} </p>
+
+      <a class="btn btn-primary" href="{% url 'update_user' %}" style="margin-left:10px;">EDIT<img src="{% static 'assets/edit.png' %}" style="width:20px;height:20px;margin-left:10px;"></a>
+      <a class="btn btn-primary" href="{% url 'update_user_password' %}">RESET PASSWORD<img src="{% static 'assets/edit.png' %}" style="width:20px;height:20px;margin-left:10px;"></a>
+
+  </div>
+</div>
+
+    <div class="card shadow" style="width:30%;margin-left:30px;margin-top:20px;background-color:rgb(186, 221, 255);">
+  <div class="card-body" style="text-align:center;margin-top:20px;margin-bottom:20px;">
+      <h5 class="card-title"><u>BIOGRAPHICAL INFORMATION</u></h5>
+    <p class="card-text">{% if profile %}
+            <p class="card-text">
+      <b>Date of Birth :</b> {{ profile.dob }}<br>
+      <b>Mother Tongue :</b> {{ profile.mother_tongue }}<br>
+      <b>Nationality :</b> {{ profile.nationality }}<br>
+      <b>Blood Group :</b> {{ profile.blood_group }}
+            </p>
+            <a class="btn btn-primary" href="{% url 'add_user_details' %}" style="margin-left:10px;">EDIT<img src="{% static 'assets/edit.png' %}" style="width:20px;height:20px;margin-left:10px;"></a>
+        {% else %}
+      <p style="text-align:center;"> You have not added biographical details yet.</p>
+            <a class="btn btn-primary" href="{% url 'add_user_details' %}" style="margin-left:10px;">ADD</a>
+        {% endif %} </p>
+  </div>
+    </div>
+
+
+    <div class="card shadow" style="width:40%;margin-left:30px;margin-top:20px;background-color:rgb(186, 194, 71);">
+  <div class="card-body" style="margin-top:20px;margin-bottom:20px;">
+      <h5 class="card-title" style="text-align:center;"><u>SKILLS</u><a href="{% url 'add_skill' %}" class="btn btn-success btn-sm" style="margin-left:20px;margin-top:-5px;"><small>ADD SKILL</small></a></h5>
+            <p class="card-text">
+
+
+  <ul>
+        {% for skill in skills %}
+            <li>
+                <b>{{ skill.name }}</b>
+                <a href="{% url 'update_skill' skill.id %}" class="btn btn-primary btn-sm" style="text-align:center;margin-left:20px;">EDIT<img src="{% static 'assets/edit.png' %}" style="width:15px;height:15px;margin-left:10px;"></a>
+                <p><i><B>Description :</B></i> {{ skill.description }}</p>
+            </li>
+        {% empty %}
+            <p style="text-align:center;">You have no skills listed.</p>
+        {% endfor %}
+    </ul>
+      </p>
+  </div>
+    </div>
+
+
+       <div class="card shadow" style="width:50%;margin-left:30px;margin-top:20px;background-color:rgb(186, 120, 135);">
+  <div class="card-body" style="margin-top:20px;margin-bottom:20px;">
+      <h5 class="card-title" style="text-align:center;"><u>CONTACT DETAILS</u></h5>
+    <p class="card-text" style="margin-left:50px;margin-top:20px;">{% if contact %}
+      <b>Phone Number:</b> {{ contact.phone_number }}<br>
+                <b>Whatsapp Number:</b> {{ contact.whatsapp_number }}<br>
+                <b>Address:</b> {{ contact.address }}<br>
+                <b>LinkedIn Handle:</b> {{ contact.linkedin_handle }}<br>
+                <b>Instagram Handle:</b> {{ contact.insta_handle }}<br>
+
+            <a class="btn btn-primary" href="{% url 'add_contact_details' %}" style="margin-left:200px;margin-top:20px;">EDIT<img src="{% static 'assets/edit.png' %}" style="width:20px;height:20px;margin-left:10px;"></a>
+        {% else %}
+            <p style="text-align:center;">You have not added contact details yet.</p>
+            <a class="btn btn-primary" href="{% url 'add_contact_details' %}" style="margin-left:280px;margin-top:10px;">ADD</a>
+        {% endif %} </p>
+  </div>
+    </div>
+
+
+</div>
+
+{% endif %}
+{% endblock %}
